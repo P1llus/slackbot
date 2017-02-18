@@ -1,0 +1,11 @@
+{
+    "require": {
+        "mpociot/botman": "^1.4",
+        "mpociot/slack-client": "^0.2.8"
+    },
+    "autoload": {
+    	"psr-4": {
+    		"Pillus\\Slackbot\\": "src/"
+    	}
+    }
+}
