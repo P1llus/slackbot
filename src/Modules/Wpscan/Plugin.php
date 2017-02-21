@@ -32,6 +32,7 @@ class Plugin
     public function init()
     {
         $this->botman->hears('!wpscan version {version}', self::class.'@handleVersionSearch');
+        $this->botman->hears('!wpscan plugin {plugin}', self::class.'@handlePluginSearch');
     }
 
     public function handleVersionSearch($bot, $version)
@@ -65,32 +66,39 @@ class Plugin
             $reply[] = '*Fixed In*: '. array_get($vuln, 'fixed_in');
         }
 
+        $bot->reply(implode(PHP_EOL, $reply));
+    }
 
-        /*
+    public function handlePluginSearch($bot, $plugin)
+    {
+        $results = $this->service->pluginSearch(str_replace('.', '', $plugin));
+        $reply = [
+            'Your Results for Wordpress Plugin: '.$plugin,
+        ];
 
-        var_dump($results[$version]);
+        // if nothing found, just drop out here
+        if (!isset($results[$plugin]) || count($results[$plugin]) === 0) {
+            $reply[] = 'No Vulnerabilities found for this plugin';
 
-        foreach ($results[$version] as $vuln) 
-        {
-            foreach ($vuln as $entry)
-            {
-            var_dump($entry);
-            $reply[] = 'Title: ' . $entry['title'] . PHP_EOL . 'Published at: ' . $entry['published_date'];
-
-                foreach ($entry['references']['url'] as $url) 
-                {
-                    $reply[] = 'URL: ' . $url;
-                }
-
-            $reply[] = 'Fixed in: ' . $entry['fixed_in'];
-            }
+            $bot->reply(implode(PHP_EOL, $reply));
+            return;
         }
-        */
-        
-        
 
+        $plugin = array_get($results, $plugin, []);
 
+        $vulns = array_get($plugin, 'vulnerabilities');
+        $reply[] = 'Vulnerabilities found: '. count($vulns);
 
+        foreach ($vulns as $vuln) {
+            $reply[] = '*Title*: '. array_get($vuln, 'title');
+            $reply[] = '*Published at*: '. date('d/m/Y', strtotime(array_get($vuln, 'published_date')));
+
+            foreach (array_get($vuln, 'references.url', []) as $url) {
+                $reply[] = '*Url*: '.$url;
+            }
+
+            $reply[] = '*Fixed In*: '. array_get($vuln, 'fixed_in');
+        }
 
         $bot->reply(implode(PHP_EOL, $reply));
     }
