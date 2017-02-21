@@ -1,7 +1,8 @@
 {
     "require": {
         "mpociot/botman": "^1.4",
-        "mpociot/slack-client": "^0.2.8"
+        "mpociot/slack-client": "^0.2.8",
+        "rappasoft/laravel-helpers": "dev-master"
     },
     "autoload": {
     	"psr-4": {
