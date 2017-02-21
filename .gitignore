@@ -1,3 +1,4 @@
 /src/Config/config.php
 /src/Modules/*/config.php
 /vendor
+*php_cs.cache
