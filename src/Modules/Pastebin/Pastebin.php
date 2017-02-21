@@ -12,7 +12,7 @@ class Pastebin
     * Grab the config file for this Module
     */
 
-    public function __construct() 
+    public function __construct()
     {
         $this->config = require('config.php');
     }
@@ -58,6 +58,4 @@ class Pastebin
         $response = $client->request('POST');
         return $response->getBody()->getContents();
     }
-
 };
-

@@ -4,7 +4,8 @@ namespace Pillus\Slackbot\Modules\Pastebin;
 
 use Pillus\Slackbot\Modules\Pastebin\Pastebin;
 
-class Plugin {
+class Plugin
+{
 
     /**
      * @var Botman
@@ -30,15 +31,19 @@ class Plugin {
         return $this;
     }
 
-    public function init() 
+    public function init()
     {
         $this->botman->hears('!pbpaste {data}', self::class.'@handlepbPaste');
     }
 
-    public function handlePbPaste($bot, $data) 
+    public function handlePbPaste($bot, $data)
     {
         $login = $this->service->login();
         $paste = $this->service->paste($login, $data);
-        $bot->reply('Your paste is: '.$paste);
+        $reply = [
+            'Your paste is here: '.$paste,
+        ];
+        
+        $bot->reply(implode(PHP_EOL, $reply));
     }
 }
