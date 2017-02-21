@@ -12,7 +12,7 @@ class Shodan
     * Grab the config file for this Module
     */
 
-    public function __construct() 
+    public function __construct()
     {
         $this->config = require('config.php');
     }
@@ -32,6 +32,4 @@ class Shodan
         $response = $client->request('GET');
         return json_decode($response->getBody()->getContents(), true);
     }
-
 };
-

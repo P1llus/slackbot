@@ -4,7 +4,8 @@ namespace Pillus\Slackbot\Modules\Shodan;
 
 use Pillus\Slackbot\Modules\Shodan\Shodan;
 
-class Plugin {
+class Plugin
+{
 
     /**
      * @var Botman
@@ -28,27 +29,32 @@ class Plugin {
         return $this;
     }
 
-    public function init() 
+    public function init()
     {
         $this->botman->hears('!shodan ip {ip}', self::class.'@handleShIpSearch');
+        $this->botman->hears('!shodan url {url}', self::class.'@handleShIpSearch');
     }
 
-    public function handleShIpSearch($bot, $ip) 
+    public function handleShIpSearch($bot, $ip)
     {
         $results = $this->service->ipSearch($ip);
-        $bot->reply('Results for: '.$ip);
-        $bot->reply('Target is running on: '.$results['data'][0]['os']);
-        $bot->reply('Company: '.$results['data'][0]['asn']);
-        $bot->reply('ISP is: '.$results['data'][0]['isp']);
-        $bot->reply('Originates from: '.$results['country_name']);
-        $bot->reply('Ports open are:');
-        if(count($results['data']) > 0) 
-        {
-            foreach ($results['data'] as $data)
-            {
-                $bot->reply($data['transport'].' : '.$data['port'].' - '.$data['product']);
+        $reply = [
+            'YOur Results for: '.$ip,
+            'Target is running on: '.$results['data'][0]['os'],
+            'Company: '.$results['data'][0]['asn'],
+            'ISP is: '.$results['data'][0]['isp'],
+            'Originates from: '.$results['country_name'],
+            'Ports open are: ',
+        ];
+
+        if (count($results['data']) > 0) {
+            foreach ($results['data'] as $data) {
+                $reply[] = $data['transport'].' : '.$data['port'].' - '.$data['product'];
             }
         }
-        $bot->reply('More results can be found on: '.'https://www.shodan.io/host/'.$ip);
+    
+        $reply[] = 'More results can be found on: '.'https://www.shodan.io/host/'.$ip;
+
+        $bot->reply(implode(PHP_EOL, $reply));
     }
 }
