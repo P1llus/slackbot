@@ -12,7 +12,7 @@ class Virustotal
     * Grab the config file for this Module
     */
 
-    public function __construct() 
+    public function __construct()
     {
         $this->config = require('config.php');
     }
@@ -60,6 +60,4 @@ class Virustotal
         $response = $client->request('POST');
         return json_decode($response->getBody()->getContents(), true);
     }
-
 };
-

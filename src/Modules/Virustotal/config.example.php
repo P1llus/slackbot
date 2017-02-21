@@ -1,12 +1,12 @@
 <?php
-	
-	/**
-	* Virustotal Configuration
-	*/
+
+    /**
+    * Virustotal Configuration
+    */
 return [
 
-	'virustotal' => [
-		# Your API key
-		'public_key' => 'INPUT API KEY',
-	],
+    'virustotal' => [
+        # Your API key
+        'public_key' => 'INPUT API KEY',
+    ],
 ];
