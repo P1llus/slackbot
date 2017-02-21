@@ -35,7 +35,7 @@ class Help
             '*!shodan vuln [IP, example 100.10.0.0]* - Returns all known vulnerabilties for IP address',
             '*!shodan listqueries* - Returns popular queries that is used on Shodan',
             '*!haveibeenpwned account [Account name, example Terminator]* - This checks ihasbeenpwned if your Username/Account name has ever been mentioned in any password leaks',
-            '*!haveibeenpwned email [EMAIL, example test@example.com] - This checks ihasbeenpwned if your Email account is mentioned in any password leaks',
+            '*!haveibeenpwned email [EMAIL, example test@example.com]* - This checks ihasbeenpwned if your Email account is mentioned in any password leaks',
             '*!help* - Returns this list',
         ];
 
