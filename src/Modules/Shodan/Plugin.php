@@ -67,7 +67,7 @@ class Plugin
         $reply = [
             'Your Results for: '.$query,
         ];
-        if (isset($results['matches']) &&count($results['matches']) > 0) {
+        if (isset($results['matches']) && count($results['matches']) > 0) {
             foreach ($results['matches'] as $matches) {
                 $reply[] = 'IP: ' . $matches['ip_str']. ' - ' . 'Port: ' . $matches['port'] . ' - '. 'Org: ' . $matches['org'];
             }
@@ -114,7 +114,7 @@ class Plugin
     public function handleShListQuerySearch($bot)
     {
         $results = $this->service->listQuerySearch();
-        var_dump($results);
+        
         $reply = [
             'Popular queries are: '
         ];
