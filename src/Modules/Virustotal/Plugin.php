@@ -47,15 +47,12 @@ class Plugin
             foreach ($results['detected_urls'] as $url) {
                 $reply[] = 'URL: '.$url['url'];
             }
-        }
-
-        else {
+        } else {
             $reply[] = 'None malicious domains was found';
         }
 
         $reply[] = 'For more information go to: '.'https://www.virustotal.com/en/ip-address/'.$ip.'/information';
-        
-        
+        $bot->reply(implode(PHP_EOL, $reply));
     }
 
     public function handleUrlSearch($bot, $url)
@@ -72,6 +69,5 @@ class Plugin
         ];
 
         $bot->reply(implode(PHP_EOL, $reply));
-        
     }
 }
