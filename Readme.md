@@ -1,44 +1,35 @@
 # Some bot
-
 This is an implementation of [Botman.io](https://botman.io/) used for testing bot capabilities and API call intergration towards various security research websites.
 
 ## Current public modules added:
-
 * Help Module
-
--- Display help commands
+Display help commands
 
 * Virustotal Module
-
--- Check IP Addresses for malicious activity
--- Check URL for malicious activity
--- Gather reports and list them in the channel/message
+Check IP Addresses for malicious activity
+Check URL for malicious activity
+Gather reports and list them in the channel/message
 
 * Haveibeenpwned Module
-
--- Check a nickname or user account related to any data breaches
--- Check an email address and list which sources currently include that email in leaks
+Check a nickname or user account related to any data breaches
+Check an email address and list which sources currently include that email in leaks
 
 * Shodan
-
--- Display information about single IP, ports, company names, vulnerabilities and such
--- Run Shodan specific queries, and return with results
--- Check for heartbleed towards specified site
--- Check known vulnerabilities towards specified site
--- List commonly used search queries
+Display information about single IP, ports, company names, vulnerabilities and such
+Run Shodan specific queries, and return with results
+Check for heartbleed towards specified site
+Check known vulnerabilities towards specified site
+List commonly used search queries
 
 * WPSCAN DB
-
--- Search for known vulnerabilities related to specific wordpress versions
--- Search for known vulnerabilities related to specific wordpress plugins
+Search for known vulnerabilities related to specific wordpress versions
+Search for known vulnerabilities related to specific wordpress plugins
 
 ## Config
-
 There is currently one config in each module, for API keys, and one main config file in Config.
 These config files would need to be renamed from config.example.php
 
 ## Current public commands
-
 ```!vt ip [IP Address, example 192.168.1.1] - Checks virustotal if the IP address is safe```
 
 ```!vt url [URL, example www.microsoft.com] - Checks virustotal if the URL is safe```
@@ -64,14 +55,11 @@ These config files would need to be renamed from config.example.php
 ```!help - Returns this list```
 
 ## TODO
-
 ### Security
-
 * Add possibility to upload files to virustotal
 * Add support for malwr.com when it is up again, for really handy binary analysis
 
 ### General
-
 * Make reports use the pastebin helper, to minimize spam in channels
 * Possibility to load/reload modules on the fly, without a restart
 * Authentication system
@@ -85,15 +73,12 @@ These config files would need to be renamed from config.example.php
 * Make a better README
 
 ### Sysadmin
-
 * SYSADMIN Modules (on the way)
 
 ### Streaming
-
 * Streaming module (For things like twitch.tv)
 
 ### Other
-
 * Have one git per module instead
 * Move all new features over to issues
 * XMPP Driver?
