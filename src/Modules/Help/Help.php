@@ -23,7 +23,7 @@ class Help
 
     public function listCommands()
     {
-        $commands = 
+        $commands =
         [
             '*!vt ip [IP Address, example 192.168.1.1]* - Checks virustotal if the IP address is safe',
             '*!vt url [URL, example www.microsoft.com]* - Checks virustotal if the URL is safe',

@@ -10,31 +10,18 @@ class Grabinfo
     {
         $client = new Client($data);
 
-        try 
-        {
+        try {
             $response = $client->request($method);
 
-            if (is_bool($response))
-            {
-            return $response;
+            if (is_bool($response)) {
+                return $response;
+            } else {
+                return json_decode($response->getBody()->getContents(), true);
             }
-
-            else
-            {
-            return json_decode($response->getBody()->getContents(), true);
-            }
-        } 
-
-        catch (\GuzzleHttp\Exception\ClientException $e) 
-        {
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             return false;
-        }
-
-        catch (\GuzzleHttp\Exception\RequestException $e) 
-        {
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
             return false;
         }
     }
 }
-
-        

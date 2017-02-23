@@ -45,9 +45,8 @@ class Plugin
             'The current supported commands are:',
         ];
 
-        foreach ($results as $result)
-        {
-            $reply[] = $result . PHP_EOL;    
+        foreach ($results as $result) {
+            $reply[] = $result . PHP_EOL;
         }
 
         $bot->reply(implode(PHP_EOL, $reply));

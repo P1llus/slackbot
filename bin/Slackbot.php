@@ -24,7 +24,6 @@ use Pillus\Slackbot\Modules\Wpscan\Plugin as WpscanPlugin;
 use Pillus\Slackbot\Modules\Virustotal\Plugin as VirustotalPlugin;
 use Pillus\Slackbot\Modules\Haveibeenpwned\Plugin as HaveibeenpwnedPlugin;
 
-
 /**
 * Load config file for the bot itself
 */

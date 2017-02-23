@@ -53,18 +53,15 @@ class Plugin
         $results = $this->service->AccountSearch($account);
         
         # Sanity check for the returning response from the API.
-        if (is_bool($results) || count($results) === 0)
-        {
+        if (is_bool($results) || count($results) === 0) {
             $reply[] = sprintf('*No Leaks found for this account*');
             $bot->reply(implode(PHP_EOL, $reply));
             return;
         }
 
         # Get the title and date of the leak, and confirms if it is verified
-        else
-        {
-            foreach ($results as $result)
-            {
+        else {
+            foreach ($results as $result) {
                 $title = array_get($result, 'Title');
                 $date = array_get($result, 'BreachDate');
                 $verified = array_get($result, 'IsVerified');
@@ -87,44 +84,31 @@ class Plugin
         $results = $this->service->emailPasteSearch($email);
 
         # Sanity check for the returning response from the API.
-        if (is_bool($results) || count($results) === 0)
-        {
+        if (is_bool($results) || count($results) === 0) {
             $reply[] = sprintf('No Leaks found for this email account');
             $bot->reply(implode(PHP_EOL, $reply));
             return;
-        }
-
-        else
-        {
+        } else {
             $reply[] = sprintf('Your email has been leaked %s Times', count($results));
 
-            foreach ($results as $result)
-            {
+            foreach ($results as $result) {
                 $title = array_get($result, 'Title');
                 $source = array_get($result, 'Source');
                 $resultId = array_get($result, 'Id');
                 $date = date('d/m/Y', strtotime(array_get($result, 'Date')));
 
-                if (count(array_get($result, 'Title')) > 0)
-                {
-                   $reply[] = sprintf('*Title:* %s', $title); 
-                }
-
-                else
-                {
+                if (count(array_get($result, 'Title')) > 0) {
+                    $reply[] = sprintf('*Title:* %s', $title);
+                } else {
                     $reply[] = sprintf('*Title:* No title found');
                 }
                     
                 $reply[] = sprintf('*Source:* %s', $source);
 
-                if ($source == 'Pastebin')
-                {
+                if ($source == 'Pastebin') {
                     $reply[] = sprintf('*URL:* http://www.pastebin.com/%s', $resultId) . PHP_EOL;
-                }
-                
-                else 
-                {
-                    $reply[] = sprintf('*URL:* %s', $resultId);  
+                } else {
+                    $reply[] = sprintf('*URL:* %s', $resultId);
                 }
 
                 $reply[] = sprintf('*Published:* %s', $date) . PHP_EOL;

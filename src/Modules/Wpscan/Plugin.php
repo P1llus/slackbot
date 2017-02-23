@@ -53,16 +53,14 @@ class Plugin
         $results = $this->service->versionSearch(str_replace('.', '', $version));
         
         # Sanity check for the returning response from the API.
-        if (is_bool($results) || count(array_get($results, $version)) === 0)
-        {
+        if (is_bool($results) || count(array_get($results, $version)) === 0) {
             $reply[] = sprintf('*No results found for version:* %s', $version);
             $bot->reply(implode(PHP_EOL, $reply));
             return;
         }
 
         # Returns all vulnerabilities related to a specific wordpress version
-        else
-        {
+        else {
             $reply = [
                 sprintf('Your Results for Wordpress version: %s', $version),
             ];
@@ -101,8 +99,7 @@ class Plugin
         $results = $this->service->pluginSearch($plugin);
 
         # Sanity check for the returning response from the API.
-        if (is_bool($results) || count(array_get($results, $plugin)) === 0)
-        {
+        if (is_bool($results) || count(array_get($results, $plugin)) === 0) {
             $reply[] = sprintf('*No Vulnerabilities found for this plugin*');
 
             $bot->reply(implode(PHP_EOL, $reply));
@@ -110,9 +107,7 @@ class Plugin
         }
 
         # Returns all vulnerabilities related to a specific wordpress plugin
-        else
-        {
-
+        else {
             $vulns = array_get($results, $plugin . '.vulnerabilities');
 
             $reply = [
@@ -120,8 +115,7 @@ class Plugin
             sprintf('*Vulnerabilities found: %s*', count($vulns)) . PHP_EOL
             ];
 
-            foreach ($vulns as $vuln) 
-            {
+            foreach ($vulns as $vuln) {
                 $title = array_get($vuln, 'title');
                 $date = date('d/m/Y', strtotime(array_get($vuln, 'published_date')));
                 $urls = array_get($vuln, 'references.url', []);
@@ -130,18 +124,15 @@ class Plugin
                 $reply[] = sprintf('*Title*: %s', $title);
                 $reply[] = sprintf('*Published at*: %s', $date);
 
-                foreach ($urls as $url) 
-                {
+                foreach ($urls as $url) {
                     $reply[] = sprintf('*Url*: %s', $url);
                 }
 
-                if (count($fixed) === 0)
-                {
+                if (count($fixed) === 0) {
                     $fixed = 'Unknown';
                 }
 
-            $reply[] = sprintf('*Fixed In*: %s', $fixed) . PHP_EOL;
-            
+                $reply[] = sprintf('*Fixed In*: %s', $fixed) . PHP_EOL;
             }
 
             $bot->reply(implode(PHP_EOL, $reply));
