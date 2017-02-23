@@ -37,7 +37,7 @@ $config = require __DIR__.'/../src/Config/config.php';
 
 $loop = Factory::create();
 $botman = BotManFactory::createForRTM([
-    'slack_token' => $config['slack']['public_key'],
+    'slack_token' => array_get($config, 'slack.public_key'),
 ], $loop);
 
 /**
@@ -59,12 +59,6 @@ $plugins = [
 foreach ($plugins as $plugin) {
     $plugin->init();
 }
-
-/**
-* Help Commands
-*/
-
-
 
 /**
 * Initiate the bot instance
