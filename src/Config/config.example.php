@@ -13,4 +13,18 @@ return [
         # Your private API key
         'private_key' => 'privprv',
     ],
+
+    /**
+    * Pastebin Configuration
+    **/
+    'pastebin' => [
+        # Your API key
+        'public_key' => 'KEYKEY',
+
+        # Your Pastebin username
+        'user_name' => 'NAMENAME',
+
+        # Your Pastebin account password
+        'user_password' => 'PASSPASS',
+    ],
 ];
