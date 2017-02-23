@@ -3,18 +3,22 @@ This is an implementation of [Botman.io](https://botman.io/) used for testing bo
 
 ## Current public modules added:
 * Help Module
+
 Display help commands
 
 * Virustotal Module
+
 Check IP Addresses for malicious activity
 Check URL for malicious activity
 Gather reports and list them in the channel/message
 
 * Haveibeenpwned Module
+
 Check a nickname or user account related to any data breaches
 Check an email address and list which sources currently include that email in leaks
 
 * Shodan
+
 Display information about single IP, ports, company names, vulnerabilities and such
 Run Shodan specific queries, and return with results
 Check for heartbleed towards specified site
@@ -22,6 +26,7 @@ Check known vulnerabilities towards specified site
 List commonly used search queries
 
 * WPSCAN DB
+
 Search for known vulnerabilities related to specific wordpress versions
 Search for known vulnerabilities related to specific wordpress plugins
 
