@@ -4,6 +4,10 @@ namespace Pillus\Slackbot\Modules\Help;
 
 use Pillus\Slackbot\Modules\Help\Help;
 
+/**
+* This modules handles all help commands used by the bot
+**/
+
 class Plugin
 {
 
@@ -13,7 +17,7 @@ class Plugin
     protected $botman;
 
     /**
-     * @var Pastebin
+     * @var Help
      */
     protected $service;
 

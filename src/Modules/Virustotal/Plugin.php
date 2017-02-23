@@ -4,6 +4,11 @@ namespace Pillus\Slackbot\Modules\Virustotal;
 
 use Pillus\Slackbot\Modules\Virustotal\Virustotal;
 
+/**
+* This module handles all communication with Virustotal, including URL and IP searches, 
+* and gathering reports from finalized scans.
+**/
+
 class Plugin
 {
 
@@ -13,7 +18,7 @@ class Plugin
     protected $botman;
 
     /**
-     * @var Pastebin
+     * @var Virustotal
      */
     protected $service;
 
@@ -29,45 +34,87 @@ class Plugin
         return $this;
     }
 
+    /**
+    * Initiates all available commands used by the Shodan module.
+    **/
+
     public function init()
     {
         $this->botman->hears('!vt ip {ip}', self::class.'@handleIpSearch');
         $this->botman->hears('!vt url {url}', self::class.'@handleUrlSearch');
     }
 
+    /**
+    * Checks Virustotal if the IP address is malicious.
+    **/
+
     public function handleIpSearch($bot, $ip)
     {
         $results = $this->service->ipSearch($ip);
-        $reply = [
-            'Your Results for: '.$ip,
-        ];
-
-        if (isset($results['detected_urls']) && count($results['detected_urls']) > 0) {
-            $reply[] = 'Malicious domains found: '. count($results['detected_urls']);
-            foreach ($results['detected_urls'] as $url) {
-                $reply[] = 'URL: '.$url['url'];
-            }
-        } else {
-            $reply[] = 'None malicious domains was found';
+        
+        # Sanity check for the returning response from the API.
+        if (is_bool($results) || count(array_get($results, 'detected_urls')) === 0)
+        {
+            $reply[] = sprintf('*No malicious domains was found on %s*', $ip);
+            $bot->reply(implode(PHP_EOL, $reply));
+            return;
         }
 
-        $reply[] = 'For more information go to: '.'https://www.virustotal.com/en/ip-address/'.$ip.'/information';
-        $bot->reply(implode(PHP_EOL, $reply));
+        # Retrieves the results from the IP address
+        else
+        {
+            $detected = array_get($results, 'detected_urls');
+
+            $reply[] = sprintf('*Your Results for:* %s', $ip);
+            $reply[] = sprintf('*Malicious domains found:* %s', count($detected));
+            
+                foreach ($detected as $url) 
+                {
+                    $url = array_get($url, 'url');
+                    $reply[] = sprintf('*URL:* %s', $url);
+                }
+                
+            $reply[] = sprintf('*For more information, go to:* https://www.virustotal.com/en/ip-address/%s/information', $ip);
+
+            $bot->reply(implode(PHP_EOL, $reply));
+            return;
+        }
     }
+
+    /**
+    * Checks Virustotal if the URL address is malicious.
+    **/
 
     public function handleUrlSearch($bot, $url)
     {
-        # Slack messes up the url, so you have to reformat it
         $url = explode('|', substr($url, 1, -1))[0];
         
         $scan_id = $this->service->urlSearch($url);
         $results = $this->service->urlResult($url, $scan_id['scan_id']);
-        $reply = [
-            'Waiting for results',
-            'Scan Finished, '.$results['positives'].' thinks that this site might be malicious, out of '.$results['total'].' vendors.',
-            'For a full report, go to: '.$results['permalink'],
-        ];
 
-        $bot->reply(implode(PHP_EOL, $reply));
+        # Sanity check for the returning response from the API.
+        if (is_bool($results) || count(array_get($results, 'positives')) === 0)
+        {
+            $reply [] = sprintf('*No results found for:* %s.' . PHP_EOL . 
+                ' A scan is most likely being run right now, please try with the same URL in a short while', $url);
+
+            $bot->reply(implode(PHP_EOL, $reply));
+            return;
+        }
+        
+        # Retrieves the results of malicious domains from the specified URL
+        else
+        {
+            $positives = array_get($results, 'positives');
+            $total = array_get($results, 'total');
+
+            $reply = [
+                sprintf('*Waiting for results*'),
+                sprintf('*Scan Finished*: %s thinks that this site might be malicious, out of %s vendors', $positives, $total)
+            ];
+
+            $bot->reply(implode(PHP_EOL, $reply));
+            return;
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace Pillus\Slackbot\Modules\Haveibeenpwned;
 
 use GuzzleHttp\Client;
+use Pillus\Slackbot\Helpers\Grabinfo;
 
 class Haveibeenpwned
 {
@@ -15,6 +16,8 @@ class Haveibeenpwned
     public function __construct()
     {
         $this->config = require('config.php');
+        $this->baseurl = 'https://haveibeenpwned.com/api/v2/';
+        $this->grab = new Grabinfo;
     }
     
     /**
@@ -23,12 +26,11 @@ class Haveibeenpwned
 
     public function accountSearch($account)
     {
-        $client = new Client([
-            'base_uri' => 'https://haveibeenpwned.com/api/v2/breachedaccount/'.urlencode($account),
-        ]);
+        $data = [
+            'base_uri' => sprintf($this->baseurl . '/breachedaccount/%s', urlencode($account)),
+        ];
 
-        $response = $client->request('GET');
-        return json_decode($response->getBody()->getContents(), true);
+        return $this->grab->grab($data, 'GET');
     }
 
     /**
@@ -38,11 +40,10 @@ class Haveibeenpwned
     public function emailPasteSearch($email)
     {
         $email = explode('|', substr($email, 1, -1))[1];
-        $client = new Client([
-            'base_uri' => 'https://haveibeenpwned.com/api/v2/pasteaccount/'. urlencode($email),
-        ]);
+        $data = [
+            'base_uri' => sprintf($this->baseurl . 'pasteaccount/%s', urlencode($email)),
+        ];
 
-        $response = $client->request('GET');
-        return json_decode($response->getBody()->getContents(), true);
+        return $this->grab->grab($data, 'GET');
     }
 };

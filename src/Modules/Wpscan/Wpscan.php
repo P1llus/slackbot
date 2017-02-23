@@ -3,6 +3,7 @@
 namespace Pillus\Slackbot\Modules\Wpscan;
 
 use GuzzleHttp\Client;
+use Pillus\Slackbot\Helpers\Grabinfo;
 
 class Wpscan
 {
@@ -15,6 +16,8 @@ class Wpscan
     public function __construct()
     {
         $this->config = require('config.php');
+        $this->grab = new Grabinfo;
+        $this->baseurl = 'https://wpvulndb.com/api/v2/';
     }
     
     /**
@@ -23,19 +26,23 @@ class Wpscan
 
     public function versionSearch($version)
     {
-        $client = new Client([
-            'base_uri' => 'https://wpvulndb.com/api/v2/wordpresses/'.$version,
-        ]);
-        $response = $client->request('GET');
-        return json_decode($response->getBody()->getContents(), true);
+        $data = [
+            'base_uri' => sprintf($this->baseurl . 'wordpresses/%s', $version),
+        ];
+
+        return $this->grab->grab($data, 'GET');
     }
+
+    /**
+    * Check a Wordpress plugin for information on wpvulndb.com
+    */
 
     public function pluginSearch($plugin)
     {
-        $client = new Client([
-            'base_uri' => 'https://wpvulndb.com/api/v2/plugins/'.$plugin,
-        ]);
-        $response = $client->request('GET');
-        return json_decode($response->getBody()->getContents(), true);
+        $data = [
+            'base_uri' => sprintf($this->baseurl . 'plugins/%s', $plugin),
+        ];
+
+        return $this->grab->grab($data, 'GET');
     }
 };

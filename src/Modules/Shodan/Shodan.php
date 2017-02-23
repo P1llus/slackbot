@@ -3,83 +3,102 @@
 namespace Pillus\Slackbot\Modules\Shodan;
 
 use GuzzleHttp\Client;
+use Pillus\Slackbot\Helpers\Grabinfo;
 
 class Shodan
 {
     public $config;
 
     /**
-    * Grab the config file for this Module
-    */
+    * Grabs the configuration and a few class wide variables for this Module
+    **/
 
     public function __construct()
     {
         $this->config = require('config.php');
+        $this->grab = new Grabinfo;
+        $this->key = array_get($this->config, 'shodan.public_key');
+        $this->baseurl = 'https://api.shodan.io/shodan/';
     }
     
     /**
-    * Check a IP for information on Shodan.io
-    */
+    * Checks an IP address for information on Shodan.io
+    **/
 
     public function ipSearch($ip)
     {
-        $client = new Client([
-            'base_uri' => 'https://api.shodan.io/shodan/host/'.$ip,
+        $data = [
+            'base_uri' => sprintf($this->baseurl . 'host/%s', $ip),
             'query' => [
-                'key'   =>  $this->config['shodan']['public_key'],
+                'key'   =>  $this->key,
             ],
-        ]);
-        $response = $client->request('GET');
-        return json_decode($response->getBody()->getContents(), true);
+        ];
+
+        return $this->grab->grab($data, 'GET');
     }
+
+    /**
+    * Runs a Shodan specific query against their API
+    **/
 
     public function querySearch($query, $facets = null)
     {
-        $client = new Client([
-            'base_uri' => 'https://api.shodan.io/shodan/host/search',
+        $data = [
+            'base_uri' => sprintf($this->baseurl . 'host/search'),
             'query' => [
-                'key'   =>  $this->config['shodan']['public_key'],
+                'key'   =>  $this->key,
                 'query'   =>  $query,
                 'facets'   =>  $facets,
             ],
-        ]);
-        $response = $client->request('GET');
-        return json_decode($response->getBody()->getContents(), true);
+        ];
+        return $this->grab->grab($data, 'GET');
     }
+
+    /**
+    * Checks an IP address if it is vulnerable against Heartbleed
+    **/
 
     public function hbSearch($target)
     {
-        $client = new Client([
-            'base_uri' => 'https://api.shodan.io/shodan/host/'.$target,
+        $data = [
+            'base_uri' => sprintf($this->baseurl . 'host/%s', $target),
             'query' => [
-                'key'   =>  $this->config['shodan']['public_key'],
+                'key'   =>  $this->key,
             ],
-        ]);
-        $response = $client->request('GET');
-        return json_decode($response->getBody()->getContents(), true);
+        ];
+        
+        return $this->grab->grab($data, 'GET');
     }
+
+    /**
+    * Checks an IP address for known vulnerabilities
+    **/
 
     public function vulnSearch($target)
     {
-        $client = new Client([
-            'base_uri' => 'https://api.shodan.io/shodan/host/'.$target,
+        $data = [
+            'base_uri' => sprintf($this->baseurl . 'host/%s', $target),
             'query' => [
-                'key'   =>  $this->config['shodan']['public_key'],
+                'key'   =>  $this->key,
             ],
-        ]);
-        $response = $client->request('GET');
-        return json_decode($response->getBody()->getContents(), true);
+        ];
+        
+        return $this->grab->grab($data, 'GET');
     }
+
+    /**
+    * Lists popular public queries that others have used
+    **/
 
     public function listQuerySearch()
     {
-        $client = new Client([
-            'base_uri' => 'https://api.shodan.io/shodan/query',
+        $data = [
+            'base_uri' => sprintf($this->baseurl . 'query'),
             'query' => [
-                'key'   =>  $this->config['shodan']['public_key'],
+                'key'   =>  $this->key,
             ],
-        ]);
-        $response = $client->request('GET');
-        return json_decode($response->getBody()->getContents(), true);
+        ];
+        
+        return $this->grab->grab($data, 'GET');
     }
 };
